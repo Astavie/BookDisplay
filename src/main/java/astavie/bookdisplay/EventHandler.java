@@ -115,9 +115,14 @@ public class EventHandler {
 		if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
 			if (shouldDisplay()) {
 				if ((mainhand == null && !event.player.getHeldItemMainhand().isEmpty()) || (mainhand != null && !ItemStack.areItemStacksEqual(mainhand.getLeft(), event.player.getHeldItemMainhand())))
-					mainhand();
+					Minecraft.getMinecraft().addScheduledTask(this::mainhand);
 				if ((offhand == null && !event.player.getHeldItemOffhand().isEmpty()) || (offhand != null && !ItemStack.areItemStacksEqual(offhand.getLeft(), event.player.getHeldItemOffhand())))
-					offhand();
+					Minecraft.getMinecraft().addScheduledTask(this::offhand);
+
+				if (mainhand != null)
+					mainhand.getRight().onTick();
+				if (offhand != null)
+					offhand.getRight().onTick();
 			}
 		}
 	}
