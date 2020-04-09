@@ -2,6 +2,7 @@ package astavie.bookdisplay.wrapper.minecraft;
 
 import astavie.bookdisplay.wrapper.BookWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Items;
@@ -11,7 +12,7 @@ import net.minecraft.util.EnumHandSide;
 public class VanillaWrapper extends BookWrapper<GuiScreenBook> {
 
 	public VanillaWrapper(ItemStack book) {
-		super(new GuiScreenBook(Minecraft.getMinecraft().player, book, book.getItem() == Items.WRITABLE_BOOK), false);
+		super(new GuiScreenBook(Minecraft.getMinecraft().player, book, book.getItem() == Items.WRITABLE_BOOK));
 	}
 
 	@Override
@@ -30,6 +31,11 @@ public class VanillaWrapper extends BookWrapper<GuiScreenBook> {
 	public void right() {
 		if (book.currPage < book.bookTotalPages - 1)
 			book.currPage++;
+	}
+
+	@Override
+	protected boolean makeButtonInvisible(GuiButton button) {
+		return !(button instanceof GuiScreenBook.NextPageButton);
 	}
 
 }

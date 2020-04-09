@@ -40,26 +40,24 @@ public class ClipboardWrapper extends BiblioCraftWrapper<GuiClipboard> {
 			} catch (IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			book.buttonList.clear();
 		}
 	}
 
 	@Override
 	public void right() {
 		NBTTagCompound tag = Objects.requireNonNull(copy.getTagCompound());
-		if (tag.getInteger("currentPage") < tag.getInteger("totalPages") - 1) {
+		if (tag.getInteger("currentPage") < tag.getInteger("totalPages")) {
 			try {
 				NEXT.invoke(book);
 			} catch (IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
-			book.buttonList.clear();
 		}
 	}
 
 	@Override
-	public void close() {
-		super.close();
+	public void onClose() {
+		super.onClose();
 		item.setTagCompound(copy.getTagCompound());
 	}
 

@@ -24,7 +24,7 @@ public class CodeBookWrapper extends TIS3DWrapper<GuiBookCode> {
 
 	CodeBookWrapper(ItemStack book) {
 		//noinspection EntityConstructor,NullableProblems
-		super(newInstance(book), true);
+		super(newInstance(book));
 		this.data = ReflectionHelper.getPrivateValue(GuiBookCode.class, this.book, "data");
 	}
 

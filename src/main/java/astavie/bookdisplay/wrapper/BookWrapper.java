@@ -14,25 +14,45 @@ public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 
 	private static final Method keyTyped = ReflectionHelper.findMethod(GuiScreen.class, "keyTyped", "func_73869_a", char.class, int.class);
 
+	private static BookWrapper drawing = null;
+
 	protected final T book;
-	private final boolean init;
+	protected final boolean drawsBackground;
 
 	protected int width;
 	protected int height;
 
-	public BookWrapper(T book, boolean init) {
+	public BookWrapper(T book, boolean drawsBackground) {
 		this.book = book;
-		this.book.mc = Minecraft.getMinecraft();
-		this.book.itemRender = Minecraft.getMinecraft().getRenderItem();
-		this.book.fontRenderer = Minecraft.getMinecraft().fontRenderer;
-		this.init = init;
+		this.drawsBackground = drawsBackground;
+	}
+
+	public BookWrapper(T book) {
+		this(book, false);
+	}
+
+	public static void onDrawBackground() {
+		if (drawing != null) {
+			GlStateManager.translate(0, -drawing.height, 0);
+		}
 	}
 
 	@Override
 	public void draw(EnumHandSide side, float partialTicks) {
-		if (side == EnumHandSide.RIGHT)
-			GlStateManager.translate(width, 0, 0);
-		book.drawScreen(0, 0, partialTicks);
+		GlStateManager.translate(width / (side == EnumHandSide.RIGHT ? 4 : -4), 0, 0);
+
+		if (drawsBackground) {
+			// We translate down so the grey background gets lost
+			drawing = this;
+
+			GlStateManager.translate(0, height, 0);
+			book.drawScreen(0, 0, partialTicks);
+
+			drawing = null;
+		} else {
+			// We don't do anything special
+			book.drawScreen(0, 0, partialTicks);
+		}
 	}
 
 	@Override
@@ -44,7 +64,16 @@ public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 	}
 
 	@Override
-	public void close() {
+	public void onOpen() {
+	}
+
+	@Override
+	public void onTick() {
+		book.updateScreen();
+	}
+
+	@Override
+	public void onClose() {
 		try {
 			keyTyped.invoke(book, '\033', 1);
 		} catch (IllegalAccessException | InvocationTargetException e) {
@@ -55,14 +84,17 @@ public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 
 	@Override
 	public void setSize(int width, int height, EnumHandSide side) {
-		this.width = width / 2;
+		this.width = width;
 		this.height = height;
-		book.setGuiSize(this.width, this.height);
-		if (init) {
-			book.initGui();
-			for (GuiButton button : book.buttonList)
+
+		book.setWorldAndResolution(Minecraft.getMinecraft(), width, height);
+		for (GuiButton button : book.buttonList)
+			if (makeButtonInvisible(button))
 				button.visible = false;
-		}
+	}
+
+	protected boolean makeButtonInvisible(GuiButton button) {
+		return false;
 	}
 
 }

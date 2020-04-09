@@ -118,34 +118,16 @@ publishing {
 publishing {
     repositories {
         maven {
-            url "/home/arie/Code/Maven"
+            url "/home/astavie/Documents/Code/Maven"
         }
     }
 }
 
 task pushMaven(type: Exec) {
-    workingDir '/home/arie/Code/Maven'
+    workingDir '/home/astavie/Documents/Code/Maven'
     commandLine 'bash', 'push.sh', "astavie/${mod_id}", "Maven, ${mod_name}, ${project.version}"
 }
 
-task incrementBuild {
-	doLast {
-		config.mod_build = config.mod_build.toString().toInteger() + 1
-		configFile.withWriter {
-			config.toProperties().store(it, "")
-		}
-	}
-}
-
-static def parseConfig(File config) {
-	config.withReader {
-		def prop = new Properties()
-		prop.load(it)
-		return new ConfigSlurper().parse(prop)
-	}
-}
-
-publish.dependsOn incrementBuild
 pushMaven.dependsOn publish
 
 defaultTasks 'clean', 'build'

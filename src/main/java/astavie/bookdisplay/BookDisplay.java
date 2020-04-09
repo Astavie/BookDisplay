@@ -9,8 +9,6 @@ import astavie.bookdisplay.wrapper.minecraft.VanillaWrapper;
 import astavie.bookdisplay.wrapper.opencomputers.OCWrapper;
 import astavie.bookdisplay.wrapper.patchouli.PatchouliWrapper;
 import astavie.bookdisplay.wrapper.tis3d.TIS3DWrapper;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenBook;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -23,9 +21,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -36,12 +32,19 @@ public class BookDisplay {
 	static final KeyBinding left = new KeyBinding("key.bookdisplay.left", Keyboard.KEY_LEFT, "key.categories.book");
 	static final KeyBinding right = new KeyBinding("key.bookdisplay.right", Keyboard.KEY_RIGHT, "key.categories.book");
 
-	private static final Set<Class<? extends GuiScreen>> books = new HashSet<>();
 	private static final Map<Predicate<ItemStack>, Function<ItemStack, IBookWrapper>> registry = new HashMap<>();
 
-	public static void register(Class<? extends GuiScreen> type, Predicate<ItemStack> predicate, Function<ItemStack, IBookWrapper> factory) {
-		books.add(type);
+	public static void register(Predicate<ItemStack> predicate, Function<ItemStack, IBookWrapper> factory) {
 		registry.put(predicate, factory);
+	}
+
+	static boolean has(ItemStack stack) {
+		if (stack.isEmpty())
+			return false;
+		for (Map.Entry<Predicate<ItemStack>, Function<ItemStack, IBookWrapper>> entry : registry.entrySet())
+			if (entry.getKey().test(stack))
+				return true;
+		return false;
 	}
 
 	static IBookWrapper find(ItemStack stack) {
@@ -51,15 +54,6 @@ public class BookDisplay {
 			if (entry.getKey().test(stack))
 				return entry.getValue().apply(stack);
 		return null;
-	}
-
-	static boolean contains(GuiScreen book) {
-		if (books.contains(book.getClass()))
-			return true;
-		for (Class<?> clazz : books)
-			if (clazz.isInstance(book))
-				return true;
-		return false;
 	}
 
 	@Mod.EventHandler
@@ -74,7 +68,7 @@ public class BookDisplay {
 
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 
-		register(GuiScreenBook.class, item -> item.getItem() == Items.WRITABLE_BOOK || item.getItem() == Items.WRITTEN_BOOK, VanillaWrapper::new);
+		register(item -> item.getItem() == Items.WRITABLE_BOOK || item.getItem() == Items.WRITTEN_BOOK, VanillaWrapper::new);
 
 		if (Loader.isModLoaded("bibliocraft"))
 			BiblioCraftWrapper.register();
