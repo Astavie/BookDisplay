@@ -127,7 +127,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onDrawBackground(GuiScreenEvent.BackgroundDrawnEvent event) {
 		BookWrapper.onDrawBackground();
 	}
