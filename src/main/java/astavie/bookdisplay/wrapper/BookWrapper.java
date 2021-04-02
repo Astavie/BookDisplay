@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
 
 public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 
-	private static final Method keyTyped = ReflectionHelper.findMethod(GuiScreen.class, "keyTyped", "func_73869_a", char.class, int.class);
+	private static final Method keyTyped = ReflectionHelper.findMethod(GuiScreen.class, "keyTyped", "func_73869_a",
+			char.class, int.class);
 
 	private static BookWrapper drawing = null;
 
