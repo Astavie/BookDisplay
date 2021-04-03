@@ -50,6 +50,8 @@ A java 8 function, with an `ItemStack` as its input and an `IBookWrapper` as its
 
 If you want to add page scrolling, you should override the `left()` and `right()` methods. These methods should switch the page, either to the left or right of the current page.
 
+Sometimes, there are buttons in your GUI that you don't want to display on the overlay. In the `makeButtonInvisible(button)` method, you can choose per button which ones should be made invisible.
+
 #### Creating a Custom Wrapper
 `IBookWrapper` is an interface that contains rendering methods that are invoked when drawing the ingame gui. The class contains 5 extra methods you need to override, apart from `left()` and `right()`.
 
