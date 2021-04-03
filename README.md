@@ -13,6 +13,8 @@ Book Display natively supports:
  - _Engineer's Manual_ from Immersive Engineering
  - Any book from Mantle (e.g. _Materials and You_ from Tinkers' Construct)
  - _OpenComputers Manual_ from OpenComputers
+ - Any book from Patchouli
+ - The Akashic Tome
  - TIS-3D
    - TIS-3D Reference Manual
    - Code Bible
@@ -35,10 +37,7 @@ dependencies {
 }
 ```
 #### Registering Your GUI
-Next, you register your book gui with `BookDisplay.register(guiClass, predicate, factory);`
-
-##### guiClass
-The java class of your book gui.
+Next, you register your book gui with `BookDisplay.register(predicate, factory);`
 
 ##### predicate
 A java 8 predicate, with an `ItemStack` as its input. This predicate should return `true` if the `ItemStack` opens your book gui on a right click.
@@ -47,15 +46,24 @@ A java 8 predicate, with an `ItemStack` as its input. This predicate should retu
 A java 8 function, with an `ItemStack` as its input and an `IBookWrapper` as its output (more on them later). Returns an instance of `IBookWrapper` using the `ItemStack` previously checked against.
 
 #### Creating a Wrapper
-`BookWrapper` is a class that transforms a `GuiScreen` instance into an overlay that can be drawn on the ingame gui. Its constructor has two parameters: `gui`, a new instance of your book gui, and `init`, a boolean. If you input `true`, `GuiScreen.initGui()` will be invoked every time the window resolution changes.
+`BookWrapper` is a class that transforms a `GuiScreen` instance into an overlay that can be drawn on the ingame gui. Its constructor has two parameters: `gui`, a new instance of your book gui, and `drawsBackground`, a boolean. If your GUI draws a grey background when its opened, you should put `true` here, so Book Display can remove the background in the overlay.
 
 If you want to add page scrolling, you should override the `left()` and `right()` methods. These methods should switch the page, either to the left or right of the current page.
 
 #### Creating a Custom Wrapper
-`IBookWrapper` is an interface that contains rendering methods that are invoked when drawing the ingame gui. The class contains two extra methods you need to override, apart from `left()` and `right()`.
+`IBookWrapper` is an interface that contains rendering methods that are invoked when drawing the ingame gui. The class contains 5 extra methods you need to override, apart from `left()` and `right()`.
 
 ##### draw(side, partialTicks)
 This method should draw the gui on the left or right side of the screen as specified by the `side` parameter. If you want to use rendering methods from the vanilla `Gui` class, you can simply make your wrapper extend `Gui`.
 
 ##### setSize(width, height, side)
 Invoked when the window resolution changes.
+
+##### onOpen()
+Invoked when the overlay is opened, before its been rendered.
+
+##### onTick()
+Invoked every tick while the overlay is opened.
+
+##### onClose()
+Invoked when the overlay is closed, after its been rendered.
