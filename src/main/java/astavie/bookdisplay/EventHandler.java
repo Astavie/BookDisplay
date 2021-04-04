@@ -33,12 +33,13 @@ public class EventHandler {
 			mainhand.getRight().onClose();
 
 		PlayerEntity player = Minecraft.getInstance().player;
-		ItemStack stack = player.getHeldItemMainhand();
+		ItemStack stack = player.getHeldItemMainhand().copy();
 		IBookWrapper wrapper = BookDisplay.find(stack);
 
 		if (wrapper != null) {
 			MainWindow size = Minecraft.getInstance().mainWindow;
 			wrapper.setSize(size.getScaledWidth(), size.getScaledHeight(), player.getPrimaryHand());
+			Minecraft.getInstance().player.closeScreen();
 			wrapper.onOpen();
 			mainhand = Pair.of(stack, wrapper);
 		} else {
@@ -51,12 +52,13 @@ public class EventHandler {
 			offhand.getRight().onClose();
 
 		PlayerEntity player = Minecraft.getInstance().player;
-		ItemStack stack = player.getHeldItemOffhand();
+		ItemStack stack = player.getHeldItemOffhand().copy();
 		IBookWrapper wrapper = BookDisplay.find(stack);
 
 		if (wrapper != null) {
 			MainWindow size = Minecraft.getInstance().mainWindow;
 			wrapper.setSize(size.getScaledWidth(), size.getScaledHeight(), player.getPrimaryHand().opposite());
+			Minecraft.getInstance().player.closeScreen();
 			wrapper.onOpen();
 			offhand = Pair.of(stack, wrapper);
 		} else {
@@ -111,9 +113,11 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onTick(TickEvent.PlayerTickEvent event) {
 		if (shouldDisplay()) {
-			if ((mainhand == null && !event.player.getHeldItemMainhand().isEmpty()) || (mainhand != null && !ItemStack.areItemStacksEqual(mainhand.getLeft(), event.player.getHeldItemMainhand())))
+			if ((mainhand == null && !event.player.getHeldItemMainhand().isEmpty()) || (mainhand != null
+					&& !ItemStack.areItemStacksEqual(mainhand.getLeft(), event.player.getHeldItemMainhand())))
 				Minecraft.getInstance().enqueue(this::mainhand);
-			if ((offhand == null && !event.player.getHeldItemOffhand().isEmpty()) || (offhand != null && !ItemStack.areItemStacksEqual(offhand.getLeft(), event.player.getHeldItemOffhand())))
+			if ((offhand == null && !event.player.getHeldItemOffhand().isEmpty()) || (offhand != null
+					&& !ItemStack.areItemStacksEqual(offhand.getLeft(), event.player.getHeldItemOffhand())))
 				Minecraft.getInstance().enqueue(this::offhand);
 
 			if (mainhand != null)
@@ -138,7 +142,8 @@ public class EventHandler {
 			if (offhand != null) {
 				GlStateManager.pushMatrix();
 				if (cachedWidth != size.getScaledWidth() || cachedHeight != size.getScaledHeight())
-					offhand.getRight().setSize(size.getScaledWidth(), size.getScaledHeight(), player.getPrimaryHand().opposite());
+					offhand.getRight().setSize(size.getScaledWidth(), size.getScaledHeight(),
+							player.getPrimaryHand().opposite());
 				offhand.getRight().draw(player.getPrimaryHand().opposite(), event.getPartialTicks());
 				GlStateManager.popMatrix();
 			}
@@ -147,7 +152,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onDrawBackground(GuiScreenEvent.BackgroundDrawnEvent event) {
 		BookWrapper.onDrawBackground();
 	}
@@ -165,8 +170,15 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onGui(GuiOpenEvent event) {
-		if (event.getGui() != null && ModList.get().isLoaded("mantle"))
+		// Disable ingame book gui
+		if (event.getGui() != null && shouldDisplay()) {
+			disable();
+		}
+
+		// Register mantle book
+		if (event.getGui() != null && ModList.get().isLoaded("mantle")) {
 			MantleWrapper.register(event.getGui());
+		}
 	}
 
 }

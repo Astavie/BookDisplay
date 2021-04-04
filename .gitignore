@@ -23,3 +23,20 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+
+# idea
+out
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+.gitignore
+run
+.settings
+.classpath
+.project
+bin
+.vscode
