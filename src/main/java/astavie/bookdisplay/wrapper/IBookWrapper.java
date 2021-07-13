@@ -1,5 +1,6 @@
 package astavie.bookdisplay.wrapper;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.EnumHandSide;
 
 public interface IBookWrapper {

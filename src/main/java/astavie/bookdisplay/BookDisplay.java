@@ -3,11 +3,16 @@ package astavie.bookdisplay;
 import astavie.bookdisplay.wrapper.IBookWrapper;
 import astavie.bookdisplay.wrapper.bibliocraft.BiblioCraftWrapper;
 import astavie.bookdisplay.wrapper.botania.BotaniaWrapper;
+import astavie.bookdisplay.wrapper.cyclopscore.IntegratedDynamicsWrapper;
+import astavie.bookdisplay.wrapper.ebwizardry.EBWizardryHandbookWrapper;
+import astavie.bookdisplay.wrapper.ebwizardry.EBWizardrySpellBookWrapper;
+import astavie.bookdisplay.wrapper.forestry.ForestryWrapper;
 import astavie.bookdisplay.wrapper.immersiveengineering.IEWrapper;
 import astavie.bookdisplay.wrapper.mantle.MantleWrapper;
 import astavie.bookdisplay.wrapper.minecraft.VanillaWrapper;
 import astavie.bookdisplay.wrapper.opencomputers.OCWrapper;
 import astavie.bookdisplay.wrapper.patchouli.PatchouliWrapper;
+import astavie.bookdisplay.wrapper.spiceoflife.SpiceOfLifeWrapper;
 import astavie.bookdisplay.wrapper.tis3d.TIS3DWrapper;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Items;
@@ -69,20 +74,31 @@ public class BookDisplay {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 
 		register(item -> item.getItem() == Items.WRITABLE_BOOK || item.getItem() == Items.WRITTEN_BOOK, VanillaWrapper::new);
-
-		if (Loader.isModLoaded("bibliocraft"))
+		if (Loader.isModLoaded("bibliocraft"))				//bibliocraft
 			BiblioCraftWrapper.register();
-		if (Loader.isModLoaded("botania"))
+		if (Loader.isModLoaded("botania"))					//botania
 			BotaniaWrapper.register();
-		if (Loader.isModLoaded("immersiveengineering"))
+		if (Loader.isModLoaded("cyclopscore")) {			//cyclops core
+			if (Loader.isModLoaded("integrateddynamics"))	//integrated dynamics
+				IntegratedDynamicsWrapper.register();
+		}
+		if (Loader.isModLoaded("ebwizardry")) {				//electrobob wizardry
+			EBWizardryHandbookWrapper.register();
+			EBWizardrySpellBookWrapper.register();
+		}
+		if (Loader.isModLoaded("forestry"))					//forestry
+			ForestryWrapper.register();
+		if (Loader.isModLoaded("immersiveengineering"))		//immersive engineering
 			IEWrapper.register();
-		if (Loader.isModLoaded("mantle"))
+		if (Loader.isModLoaded("mantle"))					//mantle - tconstruct, constructs armory
 			MantleWrapper.register();
-		if (Loader.isModLoaded("opencomputers"))
+		if (Loader.isModLoaded("opencomputers"))			// open computers
 			OCWrapper.register();
-		if (Loader.isModLoaded("tis3d"))
+		if (Loader.isModLoaded("solcarrot"))				//spice of life - carrot edition
+			SpiceOfLifeWrapper.register();
+		if (Loader.isModLoaded("tis3d"))					//tis3d
 			TIS3DWrapper.register();
-		if (Loader.isModLoaded("patchouli"))
+		if (Loader.isModLoaded("patchouli"))				//patchouli
 			PatchouliWrapper.register();
 	}
 
