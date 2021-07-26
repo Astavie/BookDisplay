@@ -47,12 +47,12 @@ public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 			drawing = this;
 
 			GlStateManager.translate(0, height, 0);
-			book.drawScreen(0, 0, partialTicks);
+			book.drawScreen(-1, -1, partialTicks);
 
 			drawing = null;
 		} else {
 			// We don't do anything special
-			book.drawScreen(0, 0, partialTicks);
+			book.drawScreen(-1, -1, partialTicks);
 		}
 	}
 
