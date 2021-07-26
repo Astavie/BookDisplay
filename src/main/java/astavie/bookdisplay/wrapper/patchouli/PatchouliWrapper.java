@@ -2,7 +2,7 @@ package astavie.bookdisplay.wrapper.patchouli;
 
 import astavie.bookdisplay.BookDisplay;
 import astavie.bookdisplay.wrapper.BookWrapper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import vazkii.patchouli.client.book.gui.GuiBook;
 import vazkii.patchouli.common.book.Book;
 import vazkii.patchouli.common.item.ItemModBook;
@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 
 public class PatchouliWrapper extends BookWrapper<GuiBook> {
 
-	private static final Method changePage = ReflectionHelper.findMethod(GuiBook.class, "changePage", null, boolean.class, boolean.class);
+	private static final Method changePage = ObfuscationReflectionHelper.findMethod(GuiBook.class, "changePage", void.class, boolean.class, boolean.class);
 
 	public PatchouliWrapper(GuiBook book) {
 		super(book, true);

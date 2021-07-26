@@ -4,7 +4,7 @@ import astavie.bookdisplay.BookDisplay;
 import astavie.bookdisplay.wrapper.BookWrapper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.gui.book.GuiBook;
 
@@ -32,7 +32,7 @@ public class MantleWrapper extends BookWrapper<GuiMantleBook> {
 
 	public static void register(GuiScreen screen) {
 		if (screen instanceof GuiBook)
-			registry.put(ReflectionHelper.getPrivateValue(GuiBook.class, (GuiBook) screen, "item"), ((GuiBook) screen).book);
+			registry.put(ObfuscationReflectionHelper.getPrivateValue(GuiBook.class, (GuiBook) screen, "item"), ((GuiBook) screen).book);
 	}
 
 	@Override

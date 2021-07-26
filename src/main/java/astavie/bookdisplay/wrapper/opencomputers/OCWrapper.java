@@ -4,7 +4,7 @@ import astavie.bookdisplay.BookDisplay;
 import astavie.bookdisplay.wrapper.BookWrapper;
 import li.cil.oc.client.gui.Manual;
 import li.cil.oc.client.renderer.markdown.Document;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 
 public class OCWrapper extends BookWrapper<Manual> {
 
-	private static final Method scrollTo = ReflectionHelper.findMethod(Manual.class, "scrollTo", null, int.class);
+	private static final Method scrollTo = ObfuscationReflectionHelper.findMethod(Manual.class, "scrollTo", void.class, int.class);
 
 	private OCWrapper() {
 		super(new Manual());

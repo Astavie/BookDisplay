@@ -9,16 +9,15 @@ import forestry.book.gui.GuiForestryBookPages;
 import forestry.book.items.ItemForesterBook;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class ForestryWrapper extends BookWrapper {
+public class ForestryWrapper extends BookWrapper<GuiForesterBook> {
 
-    private static final Method METHOD_SET_PAGES = ReflectionHelper.findMethod(GuiForestryBookPages.class, "setPages", null, int.class);
+    private static final Method METHOD_SET_PAGES = ObfuscationReflectionHelper.findMethod(GuiForestryBookPages.class, "setPages", void.class, int.class);
     private static final Field FIELD_PAGE_INDEX = ObfuscationReflectionHelper.findField(GuiForestryBookPages.class, "pageIndex");
     private static final Field FIELD_LAST_PAGE = ObfuscationReflectionHelper.findField(GuiForestryBookPages.class, "lastPage");
     private static final Field FIELD_PAGES = ObfuscationReflectionHelper.findField(GuiForestryBookPages.class, "pages");
@@ -53,6 +52,7 @@ public class ForestryWrapper extends BookWrapper {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void right() {
         if (book instanceof GuiForestryBookPages) {
             try {

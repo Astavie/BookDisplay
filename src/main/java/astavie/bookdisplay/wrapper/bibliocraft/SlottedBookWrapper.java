@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.Iterator;
 
@@ -14,7 +14,7 @@ public class SlottedBookWrapper extends GuiSlottedBook {
 
 	SlottedBookWrapper(ItemStack item) {
 		super(Minecraft.getMinecraft().player.inventory, item, true, 0, 0, 0);
-		ReflectionHelper.setPrivateValue(GuiSlottedBook.class, this, item, "book");
+		ObfuscationReflectionHelper.setPrivateValue(GuiSlottedBook.class, this, item, "book");
 		getNBTTitleAndLines();
 
 		InventoryPlayer inventory = Minecraft.getMinecraft().player.inventory;

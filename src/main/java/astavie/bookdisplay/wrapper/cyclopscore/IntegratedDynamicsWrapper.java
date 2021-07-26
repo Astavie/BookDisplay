@@ -27,7 +27,6 @@ public class IntegratedDynamicsWrapper extends BookWrapper<GuiInfoBook> {
 
     private static final Field FIELD_NEXT_PAGE = ObfuscationReflectionHelper.findField(GuiInfoBook.class, "nextPage");
     private static final Field FIELD_NEXT_SECTION = ObfuscationReflectionHelper.findField(GuiInfoBook.class, "nextSection");
-    private static final Field FIELD_GO_TO_LAST_PAGE = ObfuscationReflectionHelper.findField(GuiInfoBook.class, "goToLastPage");
 
     protected static final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID,
             Reference.TEXTURE_PATH_GUI + "on_the_dynamics_of_integration_gui.png");
@@ -118,7 +117,6 @@ public class IntegratedDynamicsWrapper extends BookWrapper<GuiInfoBook> {
         try {
             int nextPage = (int) FIELD_NEXT_PAGE.get(this.book);
             InfoSection nextSection = (InfoSection) FIELD_NEXT_SECTION.get(this.book);
-            Boolean goToLastPage = (Boolean) FIELD_GO_TO_LAST_PAGE.get(this.book);
 
             nextSection = infoBook.getCurrentSection();
             nextPage = infoBook.getCurrentPage();
@@ -126,7 +124,6 @@ public class IntegratedDynamicsWrapper extends BookWrapper<GuiInfoBook> {
             InfoSection.Location location = infoBook.getCurrentSection().getPrevious(infoBook.getCurrentPage(), MinecraftHelpers.isShifted());
             nextSection = location.getInfoSection();
             nextPage = location.getPage();
-            goToLastPage = nextSection != infoBook.getCurrentSection() && !MinecraftHelpers.isShifted();
             infoBook.getHistory().push(new InfoSection.Location(infoBook.getCurrentPage(), infoBook.getCurrentSection()));
 
             if(nextSection != null && (nextSection != infoBook.getCurrentSection() || infoBook.getCurrentPage() != nextPage)) {
@@ -145,7 +142,6 @@ public class IntegratedDynamicsWrapper extends BookWrapper<GuiInfoBook> {
         try {
             int nextPage = (int) FIELD_NEXT_PAGE.get(this.book);
             InfoSection nextSection = (InfoSection) FIELD_NEXT_SECTION.get(this.book);
-            Boolean goToLastPage = (Boolean) FIELD_GO_TO_LAST_PAGE.get(this.book);
 
             nextSection = infoBook.getCurrentSection();
             nextPage = infoBook.getCurrentPage();

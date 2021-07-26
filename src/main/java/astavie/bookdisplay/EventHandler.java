@@ -4,7 +4,6 @@ import astavie.bookdisplay.wrapper.BookWrapper;
 import astavie.bookdisplay.wrapper.IBookWrapper;
 import astavie.bookdisplay.wrapper.mantle.MantleWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;

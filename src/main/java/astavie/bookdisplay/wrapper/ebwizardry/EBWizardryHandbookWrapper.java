@@ -40,6 +40,7 @@ public class EBWizardryHandbookWrapper extends BookWrapper<GuiWizardHandbook> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onOpen() {
         try {
             int bookmarkPage = (int) FIELD_BOOKMARK_PAGE.get(this.book);

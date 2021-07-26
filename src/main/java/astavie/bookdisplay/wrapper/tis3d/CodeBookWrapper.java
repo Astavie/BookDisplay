@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
@@ -17,15 +17,14 @@ import java.lang.reflect.Method;
 
 public class CodeBookWrapper extends TIS3DWrapper<GuiBookCode> {
 
-	private static final Method changePage = ReflectionHelper.findMethod(GuiBookCode.class, "changePage", null, int.class);
-	private static final Constructor<GuiBookCode> constructor = ReflectionHelper.findConstructor(GuiBookCode.class, EntityPlayer.class);
+	private static final Method changePage = ObfuscationReflectionHelper.findMethod(GuiBookCode.class, "changePage", void.class, int.class);
+	private static final Constructor<GuiBookCode> constructor = ObfuscationReflectionHelper.findConstructor(GuiBookCode.class, EntityPlayer.class);
 
 	private final ItemBookCode.Data data;
 
 	CodeBookWrapper(ItemStack book) {
-		//noinspection EntityConstructor,NullableProblems
 		super(newInstance(book));
-		this.data = ReflectionHelper.getPrivateValue(GuiBookCode.class, this.book, "data");
+		this.data = ObfuscationReflectionHelper.getPrivateValue(GuiBookCode.class, this.book, "data");
 	}
 
 	private static GuiBookCode newInstance(ItemStack book) {

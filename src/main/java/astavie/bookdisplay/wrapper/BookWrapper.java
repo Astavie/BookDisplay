@@ -5,17 +5,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumHandSide;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class BookWrapper<T extends GuiScreen> implements IBookWrapper {
 
-	private static final Method keyTyped = ReflectionHelper.findMethod(GuiScreen.class, "keyTyped", "func_73869_a",
-			char.class, int.class);
+	private static final Method keyTyped = ObfuscationReflectionHelper.findMethod(GuiScreen.class, "func_73869_a", void.class, char.class, int.class);
 
-	private static BookWrapper drawing = null;
+	private static BookWrapper<?> drawing = null;
 
 	protected final T book;
 	protected final boolean drawsBackground;

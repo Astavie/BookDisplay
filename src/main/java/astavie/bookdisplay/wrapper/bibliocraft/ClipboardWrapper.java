@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHandSide;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,8 +13,8 @@ import java.util.Objects;
 
 public class ClipboardWrapper extends BiblioCraftWrapper<GuiClipboard> {
 
-	private static final Method PREV = ReflectionHelper.findMethod(GuiClipboard.class, "prevPage", null);
-	private static final Method NEXT = ReflectionHelper.findMethod(GuiClipboard.class, "nextPage", null);
+	private static final Method PREV = ObfuscationReflectionHelper.findMethod(GuiClipboard.class, "prevPage", void.class);
+	private static final Method NEXT = ObfuscationReflectionHelper.findMethod(GuiClipboard.class, "nextPage", void.class);
 
 	private final ItemStack item;
 	private final ItemStack copy;
@@ -22,7 +22,7 @@ public class ClipboardWrapper extends BiblioCraftWrapper<GuiClipboard> {
 	ClipboardWrapper(ItemStack item) {
 		super(new GuiClipboard(item.copy(), true, 0, 0, 0));
 		this.item = item;
-		this.copy = ReflectionHelper.getPrivateValue(GuiClipboard.class, book, "clipStack");
+		this.copy = ObfuscationReflectionHelper.getPrivateValue(GuiClipboard.class, book, "clipStack");
 	}
 
 	@Override
